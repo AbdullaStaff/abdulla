@@ -1,0 +1,1202 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>هل تعرف عبدالله؟</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Cairo -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- Canvas Confetti for Celebration -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <!-- SheetJS for Real Excel (.xlsx) Export -->
+    <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        cairo: ['Cairo', 'sans-serif'],
+                    },
+                    colors: {
+                        crimson: {
+                            500: '#ef4444',
+                            600: '#dc2626',
+                            700: '#b91c1c',
+                            900: '#7f1d1d',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        :root {
+            --fluid-h1: clamp(1.65rem, 4.5vw, 2.5rem);
+            --fluid-h2: clamp(1.2rem, 3.2vw, 1.65rem);
+            --fluid-body: clamp(0.92rem, 2vw, 1.05rem);
+            --fluid-card-pad: clamp(1.15rem, 4vw, 2.5rem);
+        }
+
+        html {
+            -webkit-text-size-adjust: 100%;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: #090d16;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(220, 38, 38, 0.18) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(185, 28, 28, 0.15) 0px, transparent 50%);
+            min-height: 100vh;
+            min-height: 100dvh;
+            padding-top: max(0.75rem, env(safe-area-inset-top));
+            padding-bottom: max(0.75rem, env(safe-area-inset-bottom));
+            padding-left: max(0.85rem, env(safe-area-inset-left));
+            padding-right: max(0.85rem, env(safe-area-inset-right));
+            color: #f8fafc;
+            overflow-x: hidden;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .glass-card {
+            background: rgba(17, 24, 39, 0.78);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
+        }
+
+        .fluid-card {
+            padding: var(--fluid-card-pad);
+        }
+
+        .fluid-title-main {
+            font-size: var(--fluid-h1);
+            line-height: 1.25;
+        }
+
+        .fluid-title-question {
+            font-size: var(--fluid-h2);
+            line-height: 1.4;
+        }
+
+        .fluid-text {
+            font-size: var(--fluid-body);
+        }
+
+        /* Prevent iOS Safari auto-zoom on focus (requires >= 16px) */
+        input, select, textarea {
+            font-size: 16px !important;
+        }
+
+        .option-btn {
+            min-height: 54px;
+            touch-action: manipulation;
+            user-select: none;
+            -webkit-user-select: none;
+            transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @media (hover: hover) {
+            .option-btn:hover:not(:disabled) {
+                transform: translateY(-2px);
+                border-color: rgba(239, 68, 68, 0.6);
+                background-color: rgba(239, 68, 68, 0.12);
+            }
+        }
+
+        .option-btn:active:not(:disabled) {
+            transform: scale(0.98);
+        }
+
+        button {
+            touch-action: manipulation;
+        }
+
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: translateY(12px) scale(0.98);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .animate-view {
+            animation: fadeInScale 0.35s ease-out forwards;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-6px); }
+            40%, 80% { transform: translateX(6px); }
+        }
+
+        .animate-shake {
+            animation: shake 0.4s ease-in-out;
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #ef4444;
+        }
+    </style>
+</head>
+<body class="flex flex-col justify-between">
+
+    <!-- Top Navigation / Header -->
+    <header class="w-full max-w-3xl mx-auto flex items-center justify-between py-2 sm:py-3">
+        <div class="flex items-center gap-2 sm:gap-3">
+            <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-br from-red-500 to-red-700 flex items-center justify-center shadow-lg shadow-red-600/30 font-black text-white text-base sm:text-lg shrink-0">
+                ع
+            </div>
+            <span class="font-bold text-slate-200 text-sm sm:text-lg lg:text-xl tracking-wide">هل تعرف عبدالله؟</span>
+        </div>
+
+        <button onclick="openAdminModal()" class="min-h-[42px] text-xs sm:text-sm text-slate-300 hover:text-red-400 bg-slate-800/80 hover:bg-slate-800 border border-slate-700/80 px-3 sm:px-4 py-2 rounded-xl transition flex items-center gap-1.5 shrink-0">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+            </svg>
+            <span>لوحة التحكم</span>
+        </button>
+    </header>
+
+    <!-- Main Container -->
+    <main class="w-full max-w-2xl lg:max-w-3xl mx-auto my-auto py-2 sm:py-4">
+
+        <!-- VIEW 1: START SCREEN -->
+        <section id="start-view" class="glass-card fluid-card rounded-2xl sm:rounded-3xl text-center animate-view">
+            <div class="inline-flex items-center justify-center w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-gradient-to-tr from-red-600 to-rose-500 text-white shadow-xl shadow-red-600/30 mb-4 sm:mb-6">
+                <span class="text-3xl sm:text-4xl">🔥</span>
+            </div>
+
+            <h1 class="fluid-title-main font-black text-white mb-2.5 sm:mb-3 tracking-tight">
+                هل تعرف <span class="text-red-500">عبدالله</span>؟
+            </h1>
+            <p class="fluid-text text-slate-300 leading-relaxed mb-6 sm:mb-8 max-w-lg mx-auto">
+                اختبار سريع من 11 سؤال يكشف إذا كنت فعلاً تعرف عبدالله واهتماماته وعاداته.. أو بس تسلك له! 👀
+            </p>
+
+            <!-- Required Name Input Form -->
+            <form id="start-form" onsubmit="handleStartQuiz(event)" class="space-y-4 text-right max-w-md mx-auto">
+                <div>
+                    <label for="player-name" class="block text-xs sm:text-sm font-bold text-slate-200 mb-2">
+                        اكتب اسمك قبل لا تبدأ <span class="text-red-500">*</span>
+                    </label>
+                    <div class="relative">
+                        <input 
+                            type="text" 
+                            id="player-name" 
+                            placeholder="مثال: محمد، سارة، أبو فلان..." 
+                            autocomplete="off"
+                            class="w-full min-h-[50px] bg-slate-900/90 border-2 border-slate-700 focus:border-red-500 rounded-2xl px-4 py-3 text-white placeholder-slate-500 outline-none transition"
+                        >
+                    </div>
+                    <p id="name-error" class="hidden text-red-400 text-xs font-semibold mt-2 flex items-center gap-1">
+                        <span>⚠️</span> لازم تكتب اسمك عشان نقدر نحفظ نتيجتك عند عبدالله!
+                    </p>
+                </div>
+
+                <button 
+                    type="submit" 
+                    class="w-full min-h-[52px] bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-red-600 text-white font-extrabold text-base sm:text-lg py-3.5 sm:py-4 rounded-2xl shadow-lg shadow-red-600/30 transition transform active:scale-[0.98] flex items-center justify-center gap-2 mt-2"
+                >
+                    <span>ابدأ الاختبار الحين</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 rotate-180 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                    </svg>
+                </button>
+            </form>
+
+            <div class="mt-6 pt-4 sm:pt-5 border-t border-slate-800/80 flex flex-wrap items-center justify-center gap-3 sm:gap-6 text-[11px] sm:text-xs text-slate-400">
+                <span class="flex items-center gap-1.5">📝 11 سؤال</span>
+                <span class="flex items-center gap-1.5">🎯 4 خيارات لكل سؤال</span>
+                <span class="flex items-center gap-1.5">⚡ نتيجة فورية</span>
+            </div>
+        </section>
+
+        <!-- VIEW 2: QUIZ SCREEN -->
+        <section id="quiz-view" class="hidden glass-card fluid-card rounded-2xl sm:rounded-3xl animate-view">
+            <!-- Player & Progress Header -->
+            <div class="flex items-center justify-between gap-2 text-xs sm:text-sm text-slate-400 mb-3">
+                <span class="font-bold text-slate-200 bg-slate-800/80 px-3 py-1.5 rounded-full truncate max-w-[55%]">
+                    👤 <span id="display-player-name">اللاعب</span>
+                </span>
+                <span class="font-bold text-red-400 shrink-0">
+                    السؤال <span id="current-q-num">1</span> من <span id="total-q-num">11</span>
+                </span>
+            </div>
+
+            <!-- Progress Bar -->
+            <div class="w-full h-2 sm:h-2.5 bg-slate-800 rounded-full overflow-hidden mb-5 sm:mb-7">
+                <div id="progress-bar" class="h-full bg-gradient-to-l from-red-500 to-rose-600 rounded-full transition-all duration-300" style="width: 9%;"></div>
+            </div>
+
+            <!-- Question Category Badge -->
+            <div id="q-badge" class="inline-block text-[11px] sm:text-xs font-bold text-red-400 bg-red-500/10 border border-red-500/20 px-3 py-1 rounded-full mb-2.5 sm:mb-3">
+                تفضيلات عبدالله
+            </div>
+
+            <!-- Question Text -->
+            <h2 id="question-text" class="fluid-title-question font-extrabold text-white mb-2">
+                ما هو لوني المفضل؟
+            </h2>
+
+            <!-- Multi-select Hint (Shown only for Question 5) -->
+            <p id="multi-select-hint" class="hidden text-xs sm:text-sm font-bold text-amber-400 bg-amber-500/10 border border-amber-500/25 px-3.5 py-2.5 rounded-xl mb-4 sm:mb-5 flex items-center gap-2">
+                <span class="shrink-0">💡</span>
+                <span>يمكنك اختيار إجابة واحدة أو إجابتين (لعبة ورياضة)، ثم اضغط على تأكيد الإجابة</span>
+            </p>
+
+            <!-- 4 Options Container (1 col on iPhone, 2 cols on iPad & PC) -->
+            <div id="options-container" class="grid grid-cols-1 md:grid-cols-2 gap-2.5 sm:gap-3.5 mt-4">
+                <!-- Buttons injected via JS -->
+            </div>
+
+            <!-- Confirm Multi-Select Button -->
+            <button id="confirm-multi-btn" onclick="submitMultiSelect()" class="hidden w-full min-h-[50px] mt-4 sm:mt-5 bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-red-600 disabled:opacity-40 disabled:cursor-not-allowed text-white font-extrabold text-sm sm:text-base py-3.5 rounded-2xl shadow-lg shadow-red-600/25 transition">
+                تأكيد الإجابة ✓
+            </button>
+
+            <!-- Instant Feedback Toast inside card -->
+            <div id="feedback-banner" class="hidden mt-4 sm:mt-5 p-3 sm:p-3.5 rounded-2xl text-center font-bold text-xs sm:text-sm transition-all"></div>
+        </section>
+
+        <!-- VIEW 3: RESULT SCREEN -->
+        <section id="result-view" class="hidden glass-card fluid-card rounded-2xl sm:rounded-3xl text-center animate-view">
+            <div id="result-emoji" class="text-5xl sm:text-6xl mb-3 sm:mb-4">🏆</div>
+            
+            <h2 class="fluid-title-main font-black text-white mb-1.5 sm:mb-2">
+                كفو يا <span id="result-player-name" class="text-red-500">اللاعب</span>!
+            </h2>
+            <p id="result-subtitle" class="fluid-text text-slate-300 mb-5 sm:mb-6">
+                انتهيت من اختبار معرفة عبدالله
+            </p>
+
+            <!-- Score Circle / Card -->
+            <div class="bg-slate-900/90 border border-slate-800 rounded-2xl sm:rounded-3xl p-5 sm:p-6 mb-5 sm:mb-6 max-w-xs mx-auto">
+                <div class="text-xs text-slate-400 font-semibold mb-1">نتيجتك النهائية</div>
+                <div class="text-4xl sm:text-5xl font-black text-white my-1.5 sm:my-2">
+                    <span id="final-score" class="text-red-500">0</span><span class="text-xl sm:text-2xl text-slate-500"> / <span id="final-total">11</span></span>
+                </div>
+                <div id="score-percentage" class="inline-block text-xs font-bold bg-red-500/15 text-red-400 px-3 py-1 rounded-full mt-1">
+                    0%
+                </div>
+            </div>
+
+            <p id="result-verdict" class="fluid-text font-bold text-slate-100 bg-slate-800/60 border border-slate-700/60 rounded-2xl p-3.5 sm:p-4 mb-6 sm:mb-7">
+                تحليل النتيجة...
+            </p>
+
+            <!-- Action Buttons -->
+            <div class="flex flex-col sm:flex-row gap-3 justify-center max-w-lg mx-auto">
+                <button onclick="shareResult()" class="flex-1 min-h-[50px] bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-red-600 text-white font-bold text-sm sm:text-base py-3.5 px-5 rounded-2xl shadow-lg shadow-red-600/25 transition flex items-center justify-center gap-2">
+                    <span>نسخ نتيجتي ومشاركتها</span>
+                    <span>📋</span>
+                </button>
+                <button onclick="resetToStart()" class="flex-1 min-h-[50px] bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold text-sm sm:text-base py-3.5 px-5 rounded-2xl border border-slate-700 transition">
+                    إعادة الاختبار 🔄
+                </button>
+            </div>
+            <p id="copy-toast" class="hidden text-emerald-400 text-xs font-bold mt-3">✅ تم نسخ النتيجة! تقدر تلصقها الحين في الواتساب أو السناب</p>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="w-full max-w-2xl mx-auto text-center py-2.5 sm:py-3 text-[11px] sm:text-xs text-slate-500">
+        تم التصميم خصيصاً لـ <span class="text-red-400 font-bold">عبدالله</span> • متوافق مع الجوال والآيباد والكمبيوتر
+    </footer>
+
+    <!-- ========================================== -->
+    <!-- ADMIN PANEL MODAL (LOGIN + DASHBOARD)      -->
+    <!-- ========================================== -->
+    <div id="admin-modal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-3 sm:p-5 overflow-y-auto">
+        <div class="glass-card w-full max-w-4xl rounded-2xl sm:rounded-3xl p-4 sm:p-7 lg:p-8 relative my-auto max-h-[90dvh] overflow-y-auto">
+            <!-- Close Button -->
+            <button onclick="closeAdminModal()" class="sticky top-0 float-left z-10 w-10 h-10 rounded-full bg-slate-800 hover:bg-red-600 text-slate-300 hover:text-white flex items-center justify-center transition shadow-md">
+                ✕
+            </button>
+
+            <!-- ADMIN LOGIN FORM -->
+            <div id="admin-login-section" class="max-w-sm mx-auto py-4 sm:py-6 text-center clear-both">
+                <div class="w-14 h-14 rounded-2xl bg-red-500/15 border border-red-500/30 text-red-500 flex items-center justify-center mx-auto mb-4 text-2xl">
+                    🔐
+                </div>
+                <h3 class="text-xl sm:text-2xl font-black text-white mb-1">دخول لوحة التحكم</h3>
+                <p class="text-xs text-slate-400 mb-6">خاصة بعبدالله لمشاهدة نتائج الأصدقاء وإدارة الأسئلة</p>
+
+                <form onsubmit="handleAdminLogin(event)" class="space-y-4 text-right">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-300 mb-1.5">اسم المستخدم (User)</label>
+                        <input type="text" id="admin-user" value="admin" required class="w-full min-h-[48px] bg-slate-900 border border-slate-700 focus:border-red-500 rounded-xl px-4 py-2.5 text-white text-left outline-none" dir="ltr">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-300 mb-1.5">كلمة المرور (Password)</label>
+                        <input type="password" id="admin-pass" placeholder="•••••" required class="w-full min-h-[48px] bg-slate-900 border border-slate-700 focus:border-red-500 rounded-xl px-4 py-2.5 text-white text-left outline-none" dir="ltr">
+                        <p class="text-[11px] text-slate-500 mt-1">كلمة المرور الافتراضية: <code class="text-red-400">admin</code></p>
+                    </div>
+                    <p id="admin-login-error" class="hidden text-red-400 text-xs font-bold text-center">
+                        ❌ اسم المستخدم أو كلمة المرور غير صحيحة!
+                    </p>
+                    <button type="submit" class="w-full min-h-[48px] bg-red-600 hover:bg-red-500 text-white font-bold py-3 rounded-xl transition shadow-lg shadow-red-600/25">
+                        تسجيل الدخول
+                    </button>
+                </form>
+            </div>
+
+            <!-- ADMIN DASHBOARD CONTENT -->
+            <div id="admin-dashboard-section" class="hidden clear-both pt-2">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-4 mb-5">
+                    <div>
+                        <h3 class="text-lg sm:text-2xl font-black text-white flex items-center gap-2">
+                            <span>📊 لوحة تحكم عبدالله</span>
+                        </h3>
+                        <p class="text-xs text-slate-400 mt-0.5">متابعة نتائج المشاركين وتفاصيل إجاباتهم</p>
+                    </div>
+                    <div class="flex flex-wrap items-center gap-2">
+                        <button onclick="exportResultsExcel()" class="min-h-[40px] text-xs bg-emerald-600/20 hover:bg-emerald-600 text-emerald-300 hover:text-white border border-emerald-500/40 font-bold px-3.5 py-2 rounded-xl transition flex items-center gap-1.5">
+                            <span>تنزيل البيانات Excel</span>
+                            <span>📊</span>
+                        </button>
+                        <button onclick="logoutAdmin()" class="min-h-[40px] text-xs bg-red-500/15 hover:bg-red-600 text-red-400 hover:text-white border border-red-500/30 px-3.5 py-2 rounded-xl transition">
+                            خروج
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Stats Summary Cards -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 sm:gap-3.5 mb-5 sm:mb-6">
+                    <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-3 sm:p-4 text-center flex sm:block items-center justify-between px-4">
+                        <div class="text-xs text-slate-400">عدد المشاركين</div>
+                        <div id="stat-total-players" class="text-xl sm:text-2xl font-black text-white sm:mt-1">0</div>
+                    </div>
+                    <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-3 sm:p-4 text-center flex sm:block items-center justify-between px-4">
+                        <div class="text-xs text-slate-400">متوسط الدرجات</div>
+                        <div id="stat-avg-score" class="text-xl sm:text-2xl font-black text-red-500 sm:mt-1">0%</div>
+                    </div>
+                    <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-3 sm:p-4 text-center flex sm:block items-center justify-between px-4">
+                        <div class="text-xs text-slate-400">أعلى درجة</div>
+                        <div id="stat-top-score" class="text-xl sm:text-2xl font-black text-emerald-400 sm:mt-1">-</div>
+                    </div>
+                </div>
+
+                <!-- Admin Tabs -->
+                <div class="flex gap-2 mb-4 border-b border-slate-800 pb-2.5 overflow-x-auto">
+                    <button onclick="switchAdminTab('results')" id="tab-btn-results" class="min-h-[40px] shrink-0 text-xs sm:text-sm font-bold px-4 py-2 rounded-xl bg-red-600 text-white transition">
+                        سجل المشاركين
+                    </button>
+                    <button onclick="switchAdminTab('settings')" id="tab-btn-settings" class="min-h-[40px] shrink-0 text-xs sm:text-sm font-bold px-4 py-2 rounded-xl bg-slate-800 text-slate-300 hover:text-white transition">
+                        إعدادات الحساب والأسئلة
+                    </button>
+                </div>
+
+                <!-- TAB 1: RESULTS TABLE -->
+                <div id="admin-tab-results">
+                    <div class="flex flex-wrap justify-between items-center gap-2 mb-3">
+                        <span class="text-[11px] sm:text-xs text-slate-400">اضغط على "التفاصيل" لرؤية إجابات كل شخص</span>
+                        <button onclick="clearAllResults()" class="text-xs text-red-400 hover:text-red-300 underline py-1">
+                            حذف جميع النتائج 🗑️
+                        </button>
+                    </div>
+
+                    <div class="overflow-x-auto rounded-2xl border border-slate-800">
+                        <table class="w-full text-right text-xs sm:text-sm min-w-[420px]">
+                            <thead class="bg-slate-900 text-slate-400 text-xs">
+                                <tr>
+                                    <th class="py-3 px-3 sm:px-4">الاسم</th>
+                                    <th class="py-3 px-3 sm:px-4">النتيجة</th>
+                                    <th class="py-3 px-3 sm:px-4">النسبة</th>
+                                    <th class="py-3 px-3 sm:px-4 hidden md:table-cell">التاريخ والوقت</th>
+                                    <th class="py-3 px-3 sm:px-4 text-center">إجراء</th>
+                                </tr>
+                            </thead>
+                            <tbody id="results-table-body" class="divide-y divide-slate-800/80 bg-slate-900/40">
+                                <!-- Rows populated via JS -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Detailed Answers Inspector Box -->
+                    <div id="player-details-box" class="hidden mt-5 bg-slate-900/95 border border-slate-700 rounded-2xl p-4">
+                        <div class="flex justify-between items-center mb-3 border-b border-slate-800 pb-2">
+                            <h4 class="font-bold text-white text-xs sm:text-sm">إجابات: <span id="detail-player-title" class="text-red-400"></span></h4>
+                            <button onclick="document.getElementById('player-details-box').classList.add('hidden')" class="text-xs text-slate-400 hover:text-white px-2 py-1">إغلاق ✕</button>
+                        </div>
+                        <div id="detail-answers-list" class="space-y-2 max-h-60 overflow-y-auto text-xs"></div>
+                    </div>
+                </div>
+
+                <!-- TAB 2: SETTINGS & PASSWORD -->
+                <div id="admin-tab-settings" class="hidden space-y-5">
+                    <div class="bg-slate-900/80 border border-slate-800 rounded-2xl p-4">
+                        <h4 class="font-bold text-white text-sm mb-3">تغيير كلمة مرور لوحة التحكم (المستخدم: admin)</h4>
+                        <div class="flex flex-col sm:flex-row gap-2.5">
+                            <input type="text" id="new-admin-pass" placeholder="اكتب كلمة المرور الجديدة..." class="flex-1 min-h-[46px] bg-slate-950 border border-slate-700 rounded-xl px-3.5 py-2.5 text-white outline-none focus:border-red-500">
+                            <button onclick="updateAdminPassword()" class="min-h-[46px] bg-red-600 hover:bg-red-500 text-white text-xs sm:text-sm font-bold px-5 py-2.5 rounded-xl transition shrink-0">
+                                حفظ كلمة المرور
+                            </button>
+                        </div>
+                        <p id="pass-updated-msg" class="hidden text-emerald-400 text-xs mt-2 font-bold">✅ تم تحديث كلمة المرور بنجاح!</p>
+                    </div>
+
+                    <div class="bg-slate-900/80 border border-slate-800 rounded-2xl p-4">
+                        <h4 class="font-bold text-white text-sm mb-2">قائمة الأسئلة المعتمدة حالياً (11 سؤال)</h4>
+                        <p class="text-xs text-slate-400 mb-3">مرتبة ومجهزة بـ 4 خيارات لكل سؤال حسب طلبك:</p>
+                        <ul id="admin-questions-preview" class="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs text-slate-300 max-h-64 overflow-y-auto pr-1"></ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- JAVASCRIPT LOGIC                           -->
+    <!-- ========================================== -->
+    <script>
+        // 1. Default Questions Data (11 Questions, 4 Options each)
+        const DEFAULT_QUESTIONS = [
+            {
+                id: 1,
+                category: "تفضيلات عبدالله",
+                question: "ما هو لوني المفضل؟",
+                options: ["أحمر", "أزرق", "أسود", "أخضر"],
+                correctIndex: 0
+            },
+            {
+                id: 2,
+                category: "تفضيلات عبدالله",
+                question: "ما هي أكلتي المفضلة التي لا أمل منها أبداً؟",
+                options: ["برجر", "باستا", "بيتزا", "كبسة"],
+                correctIndex: 1
+            },
+            {
+                id: 3,
+                category: "تفضيلات عبدالله",
+                question: "ما هو مشروبي المفضل (ساخن أو بارد)؟",
+                options: ["بارد", "ساخن", "الاثنين معاً", "ما أشرب مشروبات"],
+                correctIndex: 0
+            },
+            {
+                id: 4,
+                category: "تفضيلات عبدالله",
+                question: "أي فصل من فصول السنة أحب أكثر؟",
+                options: ["صيف", "ربيع", "شتاء", "خريف"],
+                correctIndex: 2
+            },
+            {
+                id: 5,
+                category: "الألعاب والرياضة",
+                question: "ما هي لعبتي الإلكترونية أو رياضتي المفضلة؟",
+                options: [
+                    "وارزون",
+                    "فورتنايت",
+                    "كرة القدم",
+                    "سباحة"
+                ],
+                multiSelect: true,
+                maxSelections: 2,
+                correctIndices: [0, 2]
+            },
+            {
+                id: 6,
+                category: "الأماكن المفضلة",
+                question: "هل أفضل البحر أم البر/الجبل؟",
+                options: ["البحر", "البر", "الجبل", "البيت"],
+                correctIndex: 1
+            },
+            {
+                id: 7,
+                category: "شخصيتي وعاداتي",
+                question: "هل أنا شخص صباحي أم ليلي (أحب السهر)؟",
+                options: ["ليلي (أحب السهر)", "على حسب المزاج", "صباحي", "ما أنام أبداً"],
+                correctIndex: 2
+            },
+            {
+                id: 8,
+                category: "شخصيتي وعاداتي",
+                question: "كيف أتصرف عادةً عندما أكون غاضباً؟",
+                options: ["أصرخ بصوت عالي", "أطلع برا البيت", "أكسر اللي قدامي", "أروح الغرفة"],
+                correctIndex: 3
+            },
+            {
+                id: 9,
+                category: "شخصيتي وعاداتي",
+                question: "ما هي الهواية التي أقضي فيها معظم وقت فراغي؟",
+                options: ["لعب", "قراءة", "رسم", "طبخ"],
+                correctIndex: 0
+            },
+            {
+                id: 10,
+                category: "شخصيتي وعاداتي",
+                question: "هل أنا شخص منظم أم فوضوي؟",
+                options: ["منظم جداً", "فوضوي", "نص ونص", "مهووس بالترتيب"],
+                correctIndex: 1
+            },
+            {
+                id: 11,
+                category: "شخصيتي وعاداتي",
+                question: "ما هو أكثر تطبيق أستخدمه على هاتفي يومياً؟",
+                options: ["سناب شات", "إنستقرام", "يوتيوب", "تيك توك"],
+                correctIndex: 3
+            }
+        ];
+
+        // Storage Keys
+        const STORAGE_RESULTS_KEY = 'abdullah_quiz_results_v1';
+        const STORAGE_ADMIN_PASS_KEY = 'abdullah_quiz_admin_pass_v1';
+
+        // App State
+        let currentPlayerName = '';
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let userAnswersLog = [];
+        let isAnswering = false;
+        let isAdminLoggedIn = false;
+        let selectedMultiIndices = [];
+
+        // DOM Elements
+        const startView = document.getElementById('start-view');
+        const quizView = document.getElementById('quiz-view');
+        const resultView = document.getElementById('result-view');
+
+        // Start Quiz Handler (Requires Name)
+        function handleStartQuiz(e) {
+            e.preventDefault();
+            const nameInput = document.getElementById('player-name');
+            const nameError = document.getElementById('name-error');
+            const trimmedName = nameInput.value.trim();
+
+            if (!trimmedName) {
+                nameError.classList.remove('hidden');
+                nameInput.classList.add('border-red-500', 'animate-shake');
+                setTimeout(() => nameInput.classList.remove('animate-shake'), 450);
+                nameInput.focus();
+                return;
+            }
+
+            nameError.classList.add('hidden');
+            nameInput.classList.remove('border-red-500');
+
+            // Initialize state
+            currentPlayerName = trimmedName;
+            currentQuestionIndex = 0;
+            score = 0;
+            userAnswersLog = [];
+            isAnswering = false;
+
+            document.getElementById('display-player-name').textContent = currentPlayerName;
+            document.getElementById('total-q-num').textContent = DEFAULT_QUESTIONS.length;
+
+            // Switch Views
+            startView.classList.add('hidden');
+            resultView.classList.add('hidden');
+            quizView.classList.remove('hidden');
+
+            renderQuestion();
+        }
+
+        // Render Current Question
+        function renderQuestion() {
+            isAnswering = false;
+            selectedMultiIndices = [];
+            const qData = DEFAULT_QUESTIONS[currentQuestionIndex];
+            const total = DEFAULT_QUESTIONS.length;
+
+            // Update Header & Progress
+            document.getElementById('current-q-num').textContent = currentQuestionIndex + 1;
+            const progressPercent = ((currentQuestionIndex + 1) / total) * 100;
+            document.getElementById('progress-bar').style.width = `${progressPercent}%`;
+
+            document.getElementById('q-badge').textContent = qData.category;
+            document.getElementById('question-text').textContent = qData.question;
+
+            const feedbackBanner = document.getElementById('feedback-banner');
+            feedbackBanner.classList.add('hidden');
+
+            const multiHint = document.getElementById('multi-select-hint');
+            const confirmMultiBtn = document.getElementById('confirm-multi-btn');
+
+            if (qData.multiSelect) {
+                multiHint.classList.remove('hidden');
+                confirmMultiBtn.classList.remove('hidden');
+                confirmMultiBtn.disabled = true;
+            } else {
+                multiHint.classList.add('hidden');
+                confirmMultiBtn.classList.add('hidden');
+            }
+
+            const optionsContainer = document.getElementById('options-container');
+            optionsContainer.innerHTML = '';
+
+            const letters = ['أ', 'ب', 'ج', 'د'];
+
+            qData.options.forEach((optText, idx) => {
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.dataset.index = idx;
+                btn.className = 'option-btn w-full text-right bg-slate-900/90 border-2 border-slate-700/90 rounded-2xl p-3.5 sm:p-4 flex items-center justify-between gap-3 text-slate-100 font-bold text-sm sm:text-base';
+                btn.innerHTML = `
+                    <div class="flex items-center gap-2.5 sm:gap-3 min-w-0">
+                        <span class="letter-badge w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-slate-800 text-red-400 font-black text-xs sm:text-sm flex items-center justify-center shrink-0 border border-slate-700">
+                            ${letters[idx]}
+                        </span>
+                        <span class="break-words">${optText}</span>
+                    </div>
+                    <span class="status-icon text-base sm:text-lg shrink-0">${qData.multiSelect ? '⬜' : ''}</span>
+                `;
+                btn.onclick = () => {
+                    if (qData.multiSelect) {
+                        toggleMultiOption(idx);
+                    } else {
+                        selectOption(idx, btn);
+                    }
+                };
+                optionsContainer.appendChild(btn);
+            });
+        }
+
+        // Toggle Multi-Selection for Question 5 (1 or 2 choices allowed)
+        function toggleMultiOption(idx) {
+            if (isAnswering) return;
+            const qData = DEFAULT_QUESTIONS[currentQuestionIndex];
+            const maxSel = qData.maxSelections || 2;
+            const existingPos = selectedMultiIndices.indexOf(idx);
+
+            if (existingPos > -1) {
+                selectedMultiIndices.splice(existingPos, 1);
+            } else {
+                if (selectedMultiIndices.length >= maxSel) {
+                    // Replace the oldest selected option if user picks a 3rd one
+                    selectedMultiIndices.shift();
+                }
+                selectedMultiIndices.push(idx);
+            }
+
+            // Update Visual Selection State
+            const allButtons = document.querySelectorAll('#options-container button');
+            allButtons.forEach((btn, btnIdx) => {
+                const isSelected = selectedMultiIndices.includes(btnIdx);
+                const iconEl = btn.querySelector('.status-icon');
+                if (isSelected) {
+                    btn.classList.remove('border-slate-700/90', 'bg-slate-900/90');
+                    btn.classList.add('border-red-500', 'bg-red-500/15', 'text-white');
+                    iconEl.textContent = '☑️';
+                } else {
+                    btn.classList.remove('border-red-500', 'bg-red-500/15', 'text-white');
+                    btn.classList.add('border-slate-700/90', 'bg-slate-900/90');
+                    iconEl.textContent = '⬜';
+                }
+            });
+
+            document.getElementById('confirm-multi-btn').disabled = selectedMultiIndices.length === 0;
+        }
+
+        // Validate & Submit Multi-Select Question (Question 5)
+        function submitMultiSelect() {
+            if (isAnswering || selectedMultiIndices.length === 0) return;
+            isAnswering = true;
+
+            const qData = DEFAULT_QUESTIONS[currentQuestionIndex];
+            const validSet = qData.correctIndices; // [0, 2] -> وارزون و كرة القدم
+            const confirmBtn = document.getElementById('confirm-multi-btn');
+            confirmBtn.disabled = true;
+
+            // Correct if user picked 1 or 2 options and EVERY picked option is in validSet
+            const isCorrect = selectedMultiIndices.length >= 1 &&
+                              selectedMultiIndices.length <= 2 &&
+                              selectedMultiIndices.every(idx => validSet.includes(idx));
+
+            const allButtons = document.querySelectorAll('#options-container button');
+            const feedbackBanner = document.getElementById('feedback-banner');
+
+            allButtons.forEach((btn, idx) => {
+                btn.disabled = true;
+                btn.classList.remove('border-red-500', 'bg-red-500/15', 'border-slate-700/90', 'bg-slate-900/90');
+                const iconEl = btn.querySelector('.status-icon');
+
+                if (validSet.includes(idx)) {
+                    btn.classList.add('border-emerald-500', 'bg-emerald-500/20', 'text-emerald-200');
+                    iconEl.textContent = '✅';
+                } else if (selectedMultiIndices.includes(idx)) {
+                    btn.classList.add('border-red-500', 'bg-red-500/20', 'text-red-200');
+                    iconEl.textContent = '❌';
+                } else {
+                    btn.classList.add('border-slate-800', 'bg-slate-900/60', 'opacity-45');
+                    iconEl.textContent = '';
+                }
+            });
+
+            if (isCorrect) {
+                score++;
+                feedbackBanner.textContent = 'صح عليك! وارزون وكرة القدم هم المفضلين عند عبدالله 🔥';
+                feedbackBanner.className = 'mt-5 p-3.5 rounded-2xl text-center font-bold text-sm bg-emerald-500/20 text-emerald-300 border border-emerald-500/30';
+            } else {
+                feedbackBanner.textContent = 'غلط! الإجابات الصحيحة هي: وارزون و كرة القدم';
+                feedbackBanner.className = 'mt-5 p-3.5 rounded-2xl text-center font-bold text-sm bg-red-500/20 text-red-300 border border-red-500/30';
+            }
+
+            const chosenLabels = selectedMultiIndices.map(i => qData.options[i]).join(' + ');
+            const correctLabels = validSet.map(i => qData.options[i]).join(' أو ');
+
+            userAnswersLog.push({
+                question: qData.question,
+                chosen: chosenLabels,
+                correct: correctLabels,
+                isCorrect: isCorrect
+            });
+
+            setTimeout(() => {
+                currentQuestionIndex++;
+                if (currentQuestionIndex < DEFAULT_QUESTIONS.length) {
+                    renderQuestion();
+                } else {
+                    finishQuiz();
+                }
+            }, 1350);
+        }
+
+        // Handle Single Option Selection
+        function selectOption(selectedIdx, selectedBtn) {
+            if (isAnswering) return;
+            isAnswering = true;
+
+            const qData = DEFAULT_QUESTIONS[currentQuestionIndex];
+            const isCorrect = selectedIdx === qData.correctIndex;
+            const allButtons = document.querySelectorAll('#options-container button');
+            const feedbackBanner = document.getElementById('feedback-banner');
+
+            // Disable all buttons
+            allButtons.forEach((btn, idx) => {
+                btn.disabled = true;
+                if (idx === qData.correctIndex) {
+                    btn.classList.remove('border-slate-700/90', 'bg-slate-900/90');
+                    btn.classList.add('border-emerald-500', 'bg-emerald-500/20', 'text-emerald-200');
+                    btn.querySelector('.status-icon').textContent = '✅';
+                } else if (idx === selectedIdx && !isCorrect) {
+                    btn.classList.remove('border-slate-700/90', 'bg-slate-900/90');
+                    btn.classList.add('border-red-500', 'bg-red-500/20', 'text-red-200');
+                    btn.querySelector('.status-icon').textContent = '❌';
+                } else {
+                    btn.classList.add('opacity-50');
+                }
+            });
+
+            if (isCorrect) {
+                score++;
+                feedbackBanner.textContent = 'صح عليك! تعرف عبدالله زين 🔥';
+                feedbackBanner.className = 'mt-5 p-3.5 rounded-2xl text-center font-bold text-sm bg-emerald-500/20 text-emerald-300 border border-emerald-500/30';
+            } else {
+                feedbackBanner.textContent = `غلط! الإجابة الصحيحة هي: ${qData.options[qData.correctIndex]}`;
+                feedbackBanner.className = 'mt-5 p-3.5 rounded-2xl text-center font-bold text-sm bg-red-500/20 text-red-300 border border-red-500/30';
+            }
+
+            // Record answer for Admin Panel
+            userAnswersLog.push({
+                question: qData.question,
+                chosen: qData.options[selectedIdx],
+                correct: qData.options[qData.correctIndex],
+                isCorrect: isCorrect
+            });
+
+            // Move to next question after brief pause
+            setTimeout(() => {
+                currentQuestionIndex++;
+                if (currentQuestionIndex < DEFAULT_QUESTIONS.length) {
+                    renderQuestion();
+                } else {
+                    finishQuiz();
+                }
+            }, 1150);
+        }
+
+        // Finish Quiz & Save Result
+        function finishQuiz() {
+            quizView.classList.add('hidden');
+            resultView.classList.remove('hidden');
+
+            const total = DEFAULT_QUESTIONS.length;
+            const percentage = Math.round((score / total) * 100);
+
+            document.getElementById('result-player-name').textContent = currentPlayerName;
+            document.getElementById('final-score').textContent = score;
+            document.getElementById('final-total').textContent = total;
+            document.getElementById('score-percentage').textContent = `${percentage}% نسبة المعرفة`;
+
+            // Custom Verdict & Emoji
+            const emojiEl = document.getElementById('result-emoji');
+            const verdictEl = document.getElementById('result-verdict');
+
+            if (score === total) {
+                emojiEl.textContent = '👑';
+                verdictEl.textContent = 'مستحيل! 11 من 11! أنت توأم روح عبدالله وتعرف أدق تفاصيله!';
+                triggerConfetti();
+            } else if (score >= 8) {
+                emojiEl.textContent = '🔥';
+                verdictEl.textContent = 'أسطورة! واضح إنك قريب جداً من عبدالله وتعرفه حق المعرفة!';
+                triggerConfetti();
+            } else if (score >= 5) {
+                emojiEl.textContent = '😎';
+                verdictEl.textContent = 'مو بطال! تعرف أشياء كثيرة عن عبدالله، بس باقي لك كم شغلة تكتشفها.';
+            } else {
+                emojiEl.textContent = '💀';
+                verdictEl.textContent = 'افااا! طلعت ما تعرف عبدالله زين.. يبيلك جلسة طويلة معه!';
+            }
+
+            // Save to localStorage for Admin Panel
+            saveResultToStorage({
+                id: Date.now(),
+                name: currentPlayerName,
+                score: score,
+                total: total,
+                percentage: percentage,
+                date: new Date().toLocaleString('ar-SA', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                }),
+                answers: userAnswersLog
+            });
+        }
+
+        function triggerConfetti() {
+            if (typeof confetti === 'function') {
+                confetti({
+                    particleCount: 90,
+                    spread: 70,
+                    origin: { y: 0.6 },
+                    colors: ['#ef4444', '#ffffff', '#f59e0b']
+                });
+            }
+        }
+
+        function shareResult() {
+            const total = DEFAULT_QUESTIONS.length;
+            const text = `جبت ${score} من ${total} في اختبار "هل تعرف عبدالله؟" 🔥\nاسمي: ${currentPlayerName}\nتتحداني تجيب أعلى مني؟ 👀`;
+            
+            const tempInput = document.createElement('textarea');
+            tempInput.value = text;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempInput);
+
+            const toast = document.getElementById('copy-toast');
+            toast.classList.remove('hidden');
+            setTimeout(() => toast.classList.add('hidden'), 3500);
+        }
+
+        function resetToStart() {
+            resultView.classList.add('hidden');
+            quizView.classList.add('hidden');
+            startView.classList.remove('hidden');
+        }
+
+        // ==========================================
+        // LOCAL STORAGE & ADMIN PANEL FUNCTIONS
+        // ==========================================
+        function getStoredResults() {
+            try {
+                return JSON.parse(localStorage.getItem(STORAGE_RESULTS_KEY)) || [];
+            } catch {
+                return [];
+            }
+        }
+
+        function saveResultToStorage(entry) {
+            const existing = getStoredResults();
+            existing.unshift(entry); // Newest first
+            localStorage.setItem(STORAGE_RESULTS_KEY, JSON.stringify(existing));
+        }
+
+        function getAdminPassword() {
+            return localStorage.getItem(STORAGE_ADMIN_PASS_KEY) || 'admin';
+        }
+
+        function openAdminModal() {
+            document.getElementById('admin-modal').classList.remove('hidden');
+            if (isAdminLoggedIn) {
+                showAdminDashboard();
+            } else {
+                document.getElementById('admin-login-section').classList.remove('hidden');
+                document.getElementById('admin-dashboard-section').classList.add('hidden');
+                document.getElementById('admin-login-error').classList.add('hidden');
+            }
+        }
+
+        function closeAdminModal() {
+            document.getElementById('admin-modal').classList.add('hidden');
+        }
+
+        function handleAdminLogin(e) {
+            e.preventDefault();
+            const user = document.getElementById('admin-user').value.trim().toLowerCase();
+            const pass = document.getElementById('admin-pass').value;
+            const expectedPass = getAdminPassword();
+
+            if (user === 'admin' && pass === expectedPass) {
+                isAdminLoggedIn = true;
+                document.getElementById('admin-pass').value = '';
+                showAdminDashboard();
+            } else {
+                document.getElementById('admin-login-error').classList.remove('hidden');
+            }
+        }
+
+        function logoutAdmin() {
+            isAdminLoggedIn = false;
+            closeAdminModal();
+        }
+
+        function showAdminDashboard() {
+            document.getElementById('admin-login-section').classList.add('hidden');
+            document.getElementById('admin-dashboard-section').classList.remove('hidden');
+            renderAdminStatsAndTable();
+            renderQuestionsPreview();
+        }
+
+        function switchAdminTab(tabName) {
+            const resultsTab = document.getElementById('admin-tab-results');
+            const settingsTab = document.getElementById('admin-tab-settings');
+            const btnResults = document.getElementById('tab-btn-results');
+            const btnSettings = document.getElementById('tab-btn-settings');
+
+            if (tabName === 'results') {
+                resultsTab.classList.remove('hidden');
+                settingsTab.classList.add('hidden');
+                btnResults.className = 'text-xs sm:text-sm font-bold px-4 py-2 rounded-xl bg-red-600 text-white transition';
+                btnSettings.className = 'text-xs sm:text-sm font-bold px-4 py-2 rounded-xl bg-slate-800 text-slate-300 hover:text-white transition';
+            } else {
+                resultsTab.classList.add('hidden');
+                settingsTab.classList.remove('hidden');
+                btnSettings.className = 'text-xs sm:text-sm font-bold px-4 py-2 rounded-xl bg-red-600 text-white transition';
+                btnResults.className = 'text-xs sm:text-sm font-bold px-4 py-2 rounded-xl bg-slate-800 text-slate-300 hover:text-white transition';
+            }
+        }
+
+        function renderAdminStatsAndTable() {
+            const results = getStoredResults();
+            const tbody = document.getElementById('results-table-body');
+            document.getElementById('player-details-box').classList.add('hidden');
+
+            // Update Stats
+            document.getElementById('stat-total-players').textContent = results.length;
+            if (results.length > 0) {
+                const avg = Math.round(results.reduce((acc, r) => acc + r.percentage, 0) / results.length);
+                const maxScore = Math.max(...results.map(r => r.score));
+                document.getElementById('stat-avg-score').textContent = `${avg}%`;
+                document.getElementById('stat-top-score').textContent = `${maxScore}/${DEFAULT_QUESTIONS.length}`;
+            } else {
+                document.getElementById('stat-avg-score').textContent = '0%';
+                document.getElementById('stat-top-score').textContent = '-';
+            }
+
+            // Populate Table
+            if (results.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="5" class="py-8 text-center text-slate-500 text-xs">
+                            لا يوجد مشاركون حتى الآن. شارك رابط الموقع مع أصدقائك!
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            tbody.innerHTML = results.map((entry, idx) => `
+                <tr class="hover:bg-slate-800/40 transition">
+                    <td class="py-3 px-4 font-bold text-white">${escapeHTML(entry.name)}</td>
+                    <td class="py-3 px-4 font-extrabold text-red-400">${entry.score} / ${entry.total}</td>
+                    <td class="py-3 px-4">
+                        <span class="px-2 py-0.5 rounded-full text-xs font-bold ${entry.percentage >= 70 ? 'bg-emerald-500/20 text-emerald-400' : 'bg-slate-800 text-slate-300'}">
+                            ${entry.percentage}%
+                        </span>
+                    </td>
+                    <td class="py-3 px-4 text-xs text-slate-400 hidden sm:table-cell">${entry.date}</td>
+                    <td class="py-3 px-4 text-center">
+                        <div class="flex items-center justify-center gap-2">
+                            <button onclick="viewPlayerDetails(${idx})" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-200 px-2.5 py-1 rounded-lg transition">
+                                التفاصيل
+                            </button>
+                            <button onclick="deleteSingleResult(${entry.id})" class="text-xs text-red-400 hover:text-red-300 px-1.5 py-1" title="حذف">
+                                ✕
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function viewPlayerDetails(index) {
+            const results = getStoredResults();
+            const entry = results[index];
+            if (!entry) return;
+
+            const box = document.getElementById('player-details-box');
+            const title = document.getElementById('detail-player-title');
+            const list = document.getElementById('detail-answers-list');
+
+            title.textContent = `${entry.name} (${entry.score}/${entry.total})`;
+            list.innerHTML = (entry.answers || []).map((ans, i) => `
+                <div class="p-2.5 rounded-xl bg-slate-950/80 border ${ans.isCorrect ? 'border-emerald-500/30' : 'border-red-500/30'} flex flex-col sm:flex-row sm:items-center justify-between gap-1">
+                    <span class="text-slate-300 font-semibold">${i + 1}. ${escapeHTML(ans.question)}</span>
+                    <span class="font-bold ${ans.isCorrect ? 'text-emerald-400' : 'text-red-400'}">
+                        ${ans.isCorrect ? '✅' : '❌'} إجابته: ${escapeHTML(ans.chosen)}
+                    </span>
+                </div>
+            `).join('');
+
+            box.classList.remove('hidden');
+        }
+
+        function deleteSingleResult(id) {
+            const filtered = getStoredResults().filter(r => r.id !== id);
+            localStorage.setItem(STORAGE_RESULTS_KEY, JSON.stringify(filtered));
+            renderAdminStatsAndTable();
+        }
+
+        function clearAllResults() {
+            localStorage.removeItem(STORAGE_RESULTS_KEY);
+            renderAdminStatsAndTable();
+        }
+
+        function updateAdminPassword() {
+            const newPass = document.getElementById('new-admin-pass').value.trim();
+            if (!newPass) return;
+            localStorage.setItem(STORAGE_ADMIN_PASS_KEY, newPass);
+            document.getElementById('new-admin-pass').value = '';
+            const msg = document.getElementById('pass-updated-msg');
+            msg.classList.remove('hidden');
+            setTimeout(() => msg.classList.add('hidden'), 3000);
+        }
+
+        function renderQuestionsPreview() {
+            const list = document.getElementById('admin-questions-preview');
+            list.innerHTML = DEFAULT_QUESTIONS.map((q, i) => {
+                const correctText = q.multiSelect
+                    ? q.correctIndices.map(idx => q.options[idx]).join(' أو ') + ' (يقبل إجابة واحدة أو الاثنتين)'
+                    : q.options[q.correctIndex];
+                return `
+                    <li class="bg-slate-950/70 p-2.5 rounded-xl border border-slate-800/80">
+                        <span class="text-red-400 font-bold">س${i + 1}:</span> ${q.question}
+                        <div class="text-[11px] text-emerald-400 mt-0.5">الإجابة الصحيحة: ${correctText}</div>
+                    </li>
+                `;
+            }).join('');
+        }
+
+        // Export Results to Real Excel File (.xlsx via SheetJS with .xls XML fallback)
+        function exportResultsExcel() {
+            const results = getStoredResults();
+            if (results.length === 0) {
+                const tbody = document.getElementById('results-table-body');
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="5" class="py-8 text-center text-amber-400 font-bold text-xs">
+                            ⚠️ لا توجد بيانات لتنزيلها حالياً! يجب أن يكمل شخص واحد الاختبار على الأقل.
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            // Build structured rows with Arabic RTL headers
+            const rows = results.map((entry, idx) => {
+                const rowObj = {
+                    '#': idx + 1,
+                    'اسم المشارك': entry.name,
+                    'النتيجة': `${entry.score} من ${entry.total}`,
+                    'الدرجة': entry.score,
+                    'النسبة المئوية': `${entry.percentage}%`,
+                    'التاريخ والوقت': entry.date
+                };
+
+                // Add each question's answer in its own column
+                DEFAULT_QUESTIONS.forEach((q, qIdx) => {
+                    const ansRecord = (entry.answers || [])[qIdx];
+                    const colHeader = `س${qIdx + 1}: ${q.question}`;
+                    if (ansRecord) {
+                        rowObj[colHeader] = `${ansRecord.chosen} (${ansRecord.isCorrect ? 'صح' : 'خطأ'})`;
+                    } else {
+                        rowObj[colHeader] = '-';
+                    }
+                });
+
+                return rowObj;
+            });
+
+            // Primary: Generate genuine .xlsx Excel workbook using SheetJS
+            if (typeof XLSX !== 'undefined') {
+                const worksheet = XLSX.utils.json_to_sheet(rows);
+                const workbook = XLSX.utils.book_new();
+
+                // Set Sheet Right-to-Left view
+                worksheet['!views'] = [{ rightToLeft: true }];
+
+                // Auto-adjust column widths for clean readability
+                const headers = Object.keys(rows[0]);
+                worksheet['!cols'] = headers.map(h => ({
+                    wch: Math.max(h.length + 6, 18)
+                }));
+
+                XLSX.utils.book_append_sheet(workbook, worksheet, 'نتائج اختبار عبدالله');
+                XLSX.writeFile(workbook, 'نتائج_اختبار_هل_تعرف_عبدالله.xlsx');
+                return;
+            }
+
+            // Fallback: SpreadsheetML (.xls) XML format if CDN is unreachable
+            const headers = Object.keys(rows[0]);
+            let xml = '<?xml version="1.0" encoding="UTF-8"?><?mso-application progid="Excel.Sheet"?>';
+            xml += '<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet" xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet">';
+            xml += '<Worksheet ss:Name="نتائج اختبار عبدالله" ss:RightToLeft="1"><Table>';
+            xml += '<Row>' + headers.map(h => `<Cell><Data ss:Type="String">${escapeHTML(h)}</Data></Cell>`).join('') + '</Row>';
+            rows.forEach(r => {
+                xml += '<Row>' + headers.map(h => {
+                    const val = r[h];
+                    const type = typeof val === 'number' ? 'Number' : 'String';
+                    return `<Cell><Data ss:Type="${type}">${escapeHTML(String(val))}</Data></Cell>`;
+                }).join('') + '</Row>';
+            });
+            xml += '</Table></Worksheet></Workbook>';
+
+            const blob = new Blob([xml], { type: 'application/vnd.ms-excel;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'نتائج_اختبار_هل_تعرف_عبدالله.xls';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function escapeHTML(str) {
+            const div = document.createElement('div');
+            div.textContent = str;
+            return div.innerHTML;
+        }
+    </script>
+</body>
+</html>
