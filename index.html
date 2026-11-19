@@ -196,7 +196,7 @@
                 هل تعرف <span class="text-red-500">عبدالله</span>؟
             </h1>
             <p class="fluid-text text-slate-300 leading-relaxed mb-6 sm:mb-8 max-w-lg mx-auto">
-                اختبار سريع من 11 سؤال يكشف إذا كنت فعلاً تعرف عبدالله واهتماماته وعاداته.. أو بس تسلك له! 👀
+                اختبار سريع من 22 سؤال يكشف إذا كنت فعلاً تعرف عبدالله واهتماماته وعاداته.. أو بس تسلك له! 👀
             </p>
 
             <!-- Required Name Input Form -->
@@ -231,7 +231,7 @@
             </form>
 
             <div class="mt-6 pt-4 sm:pt-5 border-t border-slate-800/80 flex flex-wrap items-center justify-center gap-3 sm:gap-6 text-[11px] sm:text-xs text-slate-400">
-                <span class="flex items-center gap-1.5">📝 11 سؤال</span>
+                <span class="flex items-center gap-1.5">📝 22 سؤال</span>
                 <span class="flex items-center gap-1.5">🎯 4 خيارات لكل سؤال</span>
                 <span class="flex items-center gap-1.5">⚡ نتيجة فورية</span>
             </div>
@@ -245,13 +245,13 @@
                     👤 <span id="display-player-name">اللاعب</span>
                 </span>
                 <span class="font-bold text-red-400 shrink-0">
-                    السؤال <span id="current-q-num">1</span> من <span id="total-q-num">11</span>
+                    السؤال <span id="current-q-num">1</span> من <span id="total-q-num">22</span>
                 </span>
             </div>
 
             <!-- Progress Bar -->
             <div class="w-full h-2 sm:h-2.5 bg-slate-800 rounded-full overflow-hidden mb-5 sm:mb-7">
-                <div id="progress-bar" class="h-full bg-gradient-to-l from-red-500 to-rose-600 rounded-full transition-all duration-300" style="width: 9%;"></div>
+                <div id="progress-bar" class="h-full bg-gradient-to-l from-red-500 to-rose-600 rounded-full transition-all duration-300" style="width: 4.5%;"></div>
             </div>
 
             <!-- Question Category Badge -->
@@ -299,7 +299,7 @@
             <div class="bg-slate-900/90 border border-slate-800 rounded-2xl sm:rounded-3xl p-5 sm:p-6 mb-5 sm:mb-6 max-w-xs mx-auto">
                 <div class="text-xs text-slate-400 font-semibold mb-1">نتيجتك النهائية</div>
                 <div class="text-4xl sm:text-5xl font-black text-white my-1.5 sm:my-2">
-                    <span id="final-score" class="text-red-500">0</span><span class="text-xl sm:text-2xl text-slate-500"> / <span id="final-total">11</span></span>
+                    <span id="final-score" class="text-red-500">0</span><span class="text-xl sm:text-2xl text-slate-500"> / <span id="final-total">22</span></span>
                 </div>
                 <div id="score-percentage" class="inline-block text-xs font-bold bg-red-500/15 text-red-400 px-3 py-1 rounded-full mt-1">
                     0%
@@ -463,7 +463,7 @@
                     </div>
 
                     <div class="bg-slate-900/80 border border-slate-800 rounded-2xl p-4">
-                        <h4 class="font-bold text-white text-sm mb-2">قائمة الأسئلة المعتمدة حالياً (11 سؤال)</h4>
+                        <h4 class="font-bold text-white text-sm mb-2">قائمة الأسئلة المعتمدة حالياً (22 سؤال)</h4>
                         <p class="text-xs text-slate-400 mb-3">مرتبة ومجهزة بـ 4 خيارات لكل سؤال حسب طلبك:</p>
                         <ul id="admin-questions-preview" class="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs text-slate-300 max-h-64 overflow-y-auto pr-1"></ul>
                     </div>
@@ -476,7 +476,7 @@
     <!-- JAVASCRIPT LOGIC                           -->
     <!-- ========================================== -->
     <script>
-        // 1. Default Questions Data (11 Questions, 4 Options each)
+        // 1. Default Questions Data (22 Questions, 4 Options each)
         const DEFAULT_QUESTIONS = [
             {
                 id: 1,
@@ -561,6 +561,108 @@
                 question: "ما هو أكثر تطبيق أستخدمه على هاتفي يومياً؟",
                 options: ["سناب شات", "إنستقرام", "يوتيوب", "تيك توك"],
                 correctIndex: 3
+            },
+            {
+                id: 12,
+                category: "الأكل والمشروبات",
+                question: "ما هي أكثر أكلة من طبخ البيت أحبها وأطلبها دائماً؟",
+                options: ["معكرونا", "كبسة", "مجبوس", "برياني"],
+                correctIndex: 0
+            },
+            {
+                id: 13,
+                category: "عادات البيت",
+                question: "أين هو مكاني المفضل للجلوس في البيت (الصالة أم غرفتي)؟",
+                options: ["غرفتي", "الصالة", "المجلس", "الحوش / البلكونة"],
+                correctIndex: 0
+            },
+            {
+                id: 14,
+                category: "عادات البيت",
+                question: "إذا ناديتوني وما رديت، غالباً وش أكون جالس أسوي؟",
+                options: ["ألعب", "نايم", "أتابع مقاطع", "آكل"],
+                correctIndex: 0
+            },
+            {
+                id: 15,
+                category: "عادات البيت",
+                question: "هل أنا من النوع اللي يطفي الأنوار والمكيف قبل ما يطلع من الغرفة أم أنساها دايماً؟",
+                options: [
+                    "مرات أطفيها ومرات أنساها",
+                    "أطفيها دايماً بدون استثناء",
+                    "أنساها دايماً ولا مرة أطفيها",
+                    "أطفي الأنوار بس وأخلي المكيف"
+                ],
+                correctIndex: 0
+            },
+            {
+                id: 16,
+                category: "الأكل والمشروبات",
+                question: "ما هو أكثر شيء أطلبه من البقالة أو السوبرماركت؟",
+                options: [
+                    "كوب ثلج ومشروبات غازية",
+                    "شيبس وشوكولاتة",
+                    "عصير وفطاير",
+                    "آيسكريم ومكسرات"
+                ],
+                correctIndex: 0
+            },
+            {
+                id: 17,
+                category: "عادات البيت",
+                question: "ما هو الشيء اللي دايماً أضيعه في البيت وأدور عليه؟",
+                options: ["تلفوني", "سماعاتي", "شاحن الجوال", "محفظتي"],
+                correctIndex: 0
+            },
+            {
+                id: 18,
+                category: "الأكل والمشروبات",
+                question: "الفطور الصباحي: آكله دايماً أم أسحب عليه؟",
+                options: [
+                    "مرات آكله ومرات أسحب عليه",
+                    "آكله يومياً بانتظام",
+                    "أسحب عليه دايماً",
+                    "أشرب قهوة أو عصير بس"
+                ],
+                correctIndex: 0
+            },
+            {
+                id: 19,
+                category: "عادات البيت",
+                question: "المكيف: بارد جداً (ثلج) أم معتدل؟",
+                options: ["بارد", "معتدل", "حار / دافئ", "أطفيه وأفتح الشباك"],
+                correctIndex: 0
+            },
+            {
+                id: 20,
+                category: "شخصيتي وعاداتي",
+                question: "السهر في الإجازة أم النوم بدري؟",
+                options: [
+                    "سهر",
+                    "نوم بدري",
+                    "أنام العصر وأسهر الفجر",
+                    "نفس نظام أيام الدراسة"
+                ],
+                correctIndex: 0
+            },
+            {
+                id: 21,
+                category: "شخصيتي وعاداتي",
+                question: "الجلوس مع الضيوف أم التهرب والجلوس في الغرفة؟",
+                options: [
+                    "مرات أتهرب ومرات لا",
+                    "أجلس معهم طول الوقت",
+                    "أتهرب دايماً وأقفل الباب",
+                    "أسلم عليهم وأطلع برا البيت"
+                ],
+                correctIndex: 0
+            },
+            {
+                id: 22,
+                category: "الأكل والمشروبات",
+                question: "الأكل الحار (سبايسي) أم الأكل العادي؟",
+                options: ["عادي", "حار (سبايسي)", "حار نار جداً", "يعتمد على نوع الأكلة"],
+                correctIndex: 0
             }
         ];
 
@@ -851,13 +953,13 @@
 
             if (score === total) {
                 emojiEl.textContent = '👑';
-                verdictEl.textContent = 'مستحيل! 11 من 11! أنت توأم روح عبدالله وتعرف أدق تفاصيله!';
+                verdictEl.textContent = `مستحيل! ${total} من ${total}! أنت توأم روح عبدالله وتعرف أدق تفاصيله!`;
                 triggerConfetti();
-            } else if (score >= 8) {
+            } else if (percentage >= 75) {
                 emojiEl.textContent = '🔥';
                 verdictEl.textContent = 'أسطورة! واضح إنك قريب جداً من عبدالله وتعرفه حق المعرفة!';
                 triggerConfetti();
-            } else if (score >= 5) {
+            } else if (percentage >= 45) {
                 emojiEl.textContent = '😎';
                 verdictEl.textContent = 'مو بطال! تعرف أشياء كثيرة عن عبدالله، بس باقي لك كم شغلة تكتشفها.';
             } else {
